@@ -13,6 +13,11 @@
     border-right: 1px solid #eee;
 }
 
+.magnet_icon {
+    position: absolute;
+    right: 30px;
+}
+
 .menu {
     list-style: none;
     border-bottom: 0.1em solid black;

@@ -12,4 +12,10 @@ angular.module('myApp', [
 constant('euiHost', 'http://192.168.75.5:9200').
 config(['$routeProvider', function ($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/view1'});
-}]);
+}]).
+config([
+    '$compileProvider',
+    function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|magnet):/);
+    }
+])

@@ -22,7 +22,7 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-4 sidebar">
+        <div class="col-md-2 sidebar">
             <h3>Search</h3>
             <eui-searchbox field="'Title'"></eui-searchbox> <!-- ACTION: change to field to search on -->
             <h3>Single select facet</h3>
@@ -32,14 +32,21 @@
             <eui-checklist field="'Subcategory'" size="10"></eui-checklist>
             <!-- ACTION: change to field to use as facet -->
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8 col-md-offset-2">
             <h1>Results</h1>
-            <ul>
-                <li ng-repeat="doc in indexVM.results.hits.hits">
+
+            <div class="panel panel-info" ng-repeat="doc in indexVM.results.hits.hits">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a href="{{doc._source.Magnet}}">{{doc._source.Title}}</a>
+                        <a href="{{doc._source.Magnet}}"><img class="magnet_icon" src="assets/dist/img/magnet_link.png"></a>
+                    </h3>
+                </div>
+                <div class="panel-body">
                     {{doc._source | json | limitTo: 500}}
                     <!-- OPTIONAL: display more meaningful data instead of json -->
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
