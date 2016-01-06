@@ -38,14 +38,14 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-warning"  ng-cloak ng-show="SubCategories.length >0 && selectedCategories.length >0">
+            <div class="panel panel-warning"  ng-cloak ng-show="SubCategories.length >0 && filterCategories.length >0">
                 <div class="panel-heading">
                     <h3 class="panel-title">Sub categories:</h3>
                 </div>
                 <div class="panel-body">
                     <div ng-repeat="cat in SubCategories | orderBy: 'key'">
                         <p class="text-justify">
-                            <button class="btn btn-warning wide_button" ng-class="{'active': cat.active}" ng-click="categoryClick(cat)">{{cat.key}}&nbsp;<span
+                            <button class="btn btn-success wide_button" ng-class="{'active': cat.active}" ng-click="subCategoryClick(cat)">{{cat.key}}&nbsp;<span
                                     class="badge">{{cat.doc_count}}</span></button>
                         </p>
                     </div>

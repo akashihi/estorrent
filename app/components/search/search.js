@@ -16,6 +16,7 @@ estorrentSearch.service('client', function (esFactory) {
 estorrentSearch.controller('SearchCtl', function ($scope, euiHost, client, esFactory) {
     //Initial load
     $scope.errorCategories = "Not yet loaded";
+    $scope.selectedSubCategories = {};
     client.search({
         index: 'tpb',
         type: 'torrent',
@@ -34,29 +35,34 @@ estorrentSearch.controller('SearchCtl', function ($scope, euiHost, client, esFac
         }
     });
 
-    $scope.categoryClick = function(category) {
+    $scope.categoryClick = function (category) {
         /* Mark button */
         category.active = !category.active;
 
         /* Reload sub categories list */
-        $scope.selectedCategories = [];
         $scope.filterCategories = []
-        $scope.categories.forEach(function(item) {
+        $scope.categories.forEach(function (item) {
             if (item.active) {
-                $scope.selectedCategories.push(item);
                 $scope.filterCategories.push(item.key)
             }
         });
 
-        if ($scope.filterCategories.length >0) {
+        if ($scope.filterCategories.length > 0) {
             client.search({
                 index: 'tpb',
                 type: 'torrent',
                 body: ejs.Request().agg(ejs.FilterAggregation('SubCategoryFilter').filter(ejs.TermsFilter('Category', $scope.filterCategories)).agg(ejs.TermsAggregation('categories').field('Subcategory').size(50)))
             }).then(function (resp) {
-                $scope.SubCategories = resp.aggregations.SubCategoryFilter.categories.buckets;
-                $scope.errorSubCategories = null;
-            }).catch(function (err) {
+                    $scope.SubCategories = resp.aggregations.SubCategoryFilter.categories.buckets;
+                    $scope.errorSubCategories = null;
+                    //Restore selection
+                    $scope.SubCategories.forEach(function (item) {
+                        if ($scope.selectedSubCategories[item.key]) {
+                            item.active=true
+                        }
+                    })
+                }
+            ).catch(function (err) {
                 $scope.SubCategories = null;
                 $scope.errorSubCategories = err;
                 // if the err is a NoConnections error, then the client was not able to
@@ -69,6 +75,22 @@ estorrentSearch.controller('SearchCtl', function ($scope, euiHost, client, esFac
         }
     };
 
+    $scope.subCategoryClick = function (subCategory) {
+        /* Mark button */
+        subCategory.active = !subCategory.active;
+
+        /* Prepare sub categories filter */
+        $scope.selectedSubCategories = {};
+        $scope.filterSubCategories = []
+        $scope.SubCategories.forEach(function (item) {
+            if (item.active) {
+                $scope.selectedSubCategories[item.key] = true;
+                $scope.filterSubCategories.push(item.key)
+            }
+        });
+
+    };
+
     $scope.nextPage = function () {
         log.console("here")
         if (indexVM.pageCount <= indexVM.page) {
@@ -76,4 +98,5 @@ estorrentSearch.controller('SearchCtl', function ($scope, euiHost, client, esFac
         }
         indexVM.page = indexVM.page + 1;
     }
-});
+})
+;
