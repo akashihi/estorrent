@@ -13,6 +13,7 @@
     "html5-boilerplate": "~5.2.0",
     "bootstrap": "~3.1.1",
     "angular-bootstrap": "~0.14.3",
-    "elasticui": "master"
+    "elasticui": "master",
+    "ng-infinite-scroll": "master"
   }
 }

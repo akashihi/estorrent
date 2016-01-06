@@ -18,6 +18,14 @@
     right: 30px;
 }
 
+.wide_button {
+    width: 90%;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
+}
+
 .menu {
     list-style: none;
     border-bottom: 0.1em solid black;
