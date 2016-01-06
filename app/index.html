@@ -43,8 +43,17 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    {{doc._source | json | limitTo: 500}}
-                    <!-- OPTIONAL: display more meaningful data instead of json -->
+                    <p class="text-center"><span class="badge">#{{doc._source.Id}}</span>&nbsp;<b>{{doc._source.Title}}</b></p>
+                    <dl class="dl-horizontal">
+                        <dt>Size</dt>
+                        <dd>{{doc._source.Size}}</dd>
+                        <dt>Files</dt>
+                        <dd>{{doc._source.Files}}</dd>
+                        <dt>Hash</dt>
+                        <dd>{{doc._source.Hash}}</dd>
+                    </dl>
+                    <div class="well" ng-bind-html="doc._source.Info"></div>
+                    <p class="text-right"><small>Uploaded at {{doc._source.Uploaded}} by {{doc._source.By}}</small></p>
                 </div>
             </div>
         </div>

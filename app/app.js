@@ -18,4 +18,7 @@ config([
     function ($compileProvider) {
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|magnet):/);
     }
-])
+]).
+config(['$sceProvider', function ($sceProvider) {
+    $sceProvider.enabled(false);
+}])
