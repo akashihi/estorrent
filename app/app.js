@@ -1,13 +1,13 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('myApp', [
+angular.module('estorrent', [
     'ui.bootstrap',
     'elasticui',
     'ngRoute',
-    'myApp.view1',
-    'myApp.view2',
-    'myApp.version'
+    'estorrent.view1',
+    'estorrent.view2',
+    'estorrent.version'
 ]).
 constant('euiHost', 'http://192.168.75.5:9200').
 config(['$routeProvider', function ($routeProvider) {
