@@ -1,19 +1,17 @@
 'use strict';
 
 var estorrentSearch = angular.module('estorrent.search', [
-    'ash',
     'elasticsearch'
 ]);
 
 estorrentSearch.service('client', function (esFactory) {
     return esFactory({
         host: '192.168.75.5:9200',
-        apiVersion: '1.5',
-        log: 'trace'
+        apiVersion: '1.5'
     });
 });
 
-estorrentSearch.controller('SearchCtl', function ($scope, euiHost, client, esFactory) {
+estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
     //Initial load
     $scope.errorCategories = "Not yet loaded";
     $scope.selectedSubCategories = {};
