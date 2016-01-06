@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="app.css">
     <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
-<body>
+<body ng-controller="SearchCtl">
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -27,7 +27,7 @@
         </div>
     </div>
 </nav>
-<div class="container-fluid" ng-controller="SearchCtl">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-2 sidebar">
             <div class="panel panel-danger" ng-cloak>
@@ -125,6 +125,9 @@
                     </p>
                 </div>
             </div>
+            <p class="text-center text-danger" ng-show="loading">
+                <img src="assets/dist/img/ajax-loader.gif"> <b>Loading</b></p>
+            </p>
             <p ng-show="searchResults.length > 0" class="text-center">
                 <button type="button" class="btn btn-danger" ng-click="nextPage()">More</button>
             </p>

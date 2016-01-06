@@ -18,6 +18,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
     $scope.filterCategories = {};
     $scope.filterSubCategories = {};
     $scope.pageNo = 0;
+    $scope.loading = false;
     client.search({
         index: 'tpb',
         type: 'torrent',
@@ -49,6 +50,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
         });
 
         if ($scope.filterCategories.length > 0) {
+            $scope.loading = true;
             client.search({
                 index: 'tpb',
                 type: 'torrent',
@@ -105,6 +107,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
     };
 
     $scope.doSearch = function () {
+        $scope.loading = true;
         client.search({
             index: 'tpb',
             type: 'torrent',
@@ -120,6 +123,8 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
             if (err instanceof esFactory.errors.NoConnections) {
                 $scope.errorResult = new Error('Unable to connect to elasticsearch.');
             }
+        }).finally(function() {
+            $scope.loading = false;
         });
 
     };
