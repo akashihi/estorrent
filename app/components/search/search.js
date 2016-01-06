@@ -75,7 +75,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, euiHost, client, esFac
         }
     };
 
-    $scope.subCategoryClick = function (subCategory) {
+    $scope.subCategoryClick = function(subCategory) {
         /* Mark button */
         subCategory.active = !subCategory.active;
 
@@ -90,6 +90,11 @@ estorrentSearch.controller('SearchCtl', function ($scope, euiHost, client, esFac
         });
 
     };
+
+    $scope.searchClick = function(){
+        console.log($scope.query)
+        console.log($scope.useInfo)
+    }
 
     $scope.nextPage = function () {
         log.console("here")
