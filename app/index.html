@@ -19,8 +19,15 @@
     <link rel="stylesheet" href="app.css">
     <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
-<body ng-controller="SearchCtl">
-<div class="container-fluid">
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">The Pirate Bay database search engine</a>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid" ng-controller="SearchCtl">
     <div class="row">
         <div class="col-md-2 sidebar">
             <div class="panel panel-danger" ng-cloak>
@@ -85,9 +92,10 @@
             </div>
             <!-- ACTION: change to field to use as facet -->
         </div>
-        <div class="col-md-10 col-md-offset-2">
-            <h1>Results</h1>
-
+        <div class="col-md-10" ng-cloak>
+            <h1 ng-hide="searchResults.length > 0">
+                <p class="bg-danger text-center">No data to show</p>
+            </h1>
             <div class="panel panel-info" ng-repeat="doc in searchResults">
                 <div class="panel-heading">
                     <h3 class="panel-title">
@@ -116,21 +124,21 @@
             </div>
         </div>
     </div>
-</div>
 
-<!--[if lt IE 7]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-    your browser</a> to improve your experience.</p>
-<![endif]-->
+    <!--[if lt IE 7]>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a
+            href="http://browsehappy.com/">upgrade
+        your browser</a> to improve your experience.</p>
+    <![endif]-->
 
-<!-- In production use:
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
--->
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-<script src="bower_components/elasticsearch/elasticsearch.angular.js"></script>
-<script src="bower_components/elastic.js/dist/elastic.min.js"></script>
-<script src="app.js"></script>
-<script src="components/search/search.js"></script>
+    <!-- In production use:
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+    -->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/elasticsearch/elasticsearch.angular.js"></script>
+    <script src="bower_components/elastic.js/dist/elastic.min.js"></script>
+    <script src="app.js"></script>
+    <script src="components/search/search.js"></script>
 </body>
 </html>

@@ -15,6 +15,8 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
     //Initial load
     $scope.errorCategories = "Not yet loaded";
     $scope.selectedSubCategories = {};
+    $scope.filterCategories = {};
+    $scope.filterSubCategories = {};
     client.search({
         index: 'tpb',
         type: 'torrent',
@@ -79,7 +81,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
 
         /* Prepare sub categories filter */
         $scope.selectedSubCategories = {};
-        $scope.filterSubCategories = []
+        $scope.filterSubCategories = [];
         $scope.SubCategories.forEach(function (item) {
             if (item.active) {
                 $scope.selectedSubCategories[item.key] = true;
@@ -93,9 +95,8 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
         client.search({
             index: 'tpb',
             type: 'torrent',
-            body: ejs.Request().query(ejs.MatchQuery('Title', $scope.query))
+            body: $scope.buildQuery()
         }).then(function (resp) {
-            console.log(resp)
             $scope.searchResults = resp.hits.hits
             }
         ).catch(function (err) {
@@ -108,5 +109,36 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
             }
         });
     }
-})
-;
+
+    $scope.buildQuery = function() {
+        var match = null;
+        if ($scope.useInfo) {
+            match = ejs.MultiMatchQuery(['Title', 'Info'], $scope.query)
+        } else {
+            match = ejs.MatchQuery('Title', $scope.query)
+        }
+
+        var filter = null;
+        if ($scope.filterSubCategories.length >0) {
+            filter = ejs.TermsFilter('Subcategory', $scope.filterSubCategories)
+        }
+        if ($scope.filterCategories.length >0) {
+            var categoriesFilter = ejs.TermsFilter('Category', $scope.filterCategories);
+            if ( filter != null ) {
+                filter = ejs.AndFilter([categoriesFilter, filter])
+            } else {
+                filter = categoriesFilter
+            }
+        }
+
+        var request = ejs.Request();
+        if (filter != null) {
+            request = request.query(ejs.FilteredQuery(match, filter))
+        } else {
+            request = request.query(match)
+        }
+
+        return request
+    }
+});
+
