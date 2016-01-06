@@ -69,7 +69,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, euiHost, client, esFac
                 // connect to elasticsearch. In that case, create a more detailed error
                 // message
                 if (err instanceof esFactory.errors.NoConnections) {
-                    $scope.errorCategories = new Error('Unable to connect to elasticsearch.');
+                    $scope.errorSubCategories = new Error('Unable to connect to elasticsearch.');
                 }
             });
         }
@@ -92,16 +92,23 @@ estorrentSearch.controller('SearchCtl', function ($scope, euiHost, client, esFac
     };
 
     $scope.searchClick = function(){
-        console.log($scope.query)
-        console.log($scope.useInfo)
-    }
-
-    $scope.nextPage = function () {
-        log.console("here")
-        if (indexVM.pageCount <= indexVM.page) {
-            return
-        }
-        indexVM.page = indexVM.page + 1;
+        client.search({
+            index: 'tpb',
+            type: 'torrent',
+            body: ejs.Request().query(ejs.MatchQuery('Title', $scope.query))
+        }).then(function (resp) {
+            console.log(resp)
+            $scope.searchResults = resp.hits.hits
+            }
+        ).catch(function (err) {
+            $scope.errorResult = err;
+            // if the err is a NoConnections error, then the client was not able to
+            // connect to elasticsearch. In that case, create a more detailed error
+            // message
+            if (err instanceof esFactory.errors.NoConnections) {
+                $scope.errorResult = new Error('Unable to connect to elasticsearch.');
+            }
+        });
     }
 })
 ;

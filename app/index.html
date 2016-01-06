@@ -19,10 +19,10 @@
     <link rel="stylesheet" href="app.css">
     <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
-<body>
+<body ng-controller="SearchCtl">
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2 sidebar" ng-controller="SearchCtl">
+        <div class="col-md-2 sidebar">
             <div class="panel panel-danger" ng-cloak>
                 <div class="panel-heading">
                     <h3 class="panel-title">Torrent search:</h3>
@@ -88,31 +88,30 @@
         <div class="col-md-10 col-md-offset-2">
             <h1>Results</h1>
 
-            <div ng-infinite-scroll="nextPage()">
-                <div class="panel panel-info" ng-repeat="doc in indexVM.results.hits.hits">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
-                            <a href="{{doc._source.Magnet}}">{{doc._source.Title}}</a>
-                            <a href="{{doc._source.Magnet}}"><img class="magnet_icon"
-                                                                  src="assets/dist/img/magnet_link.png"></a>
-                        </h3>
-                    </div>
-                    <div class="panel-body">
-                        <p class="text-center"><span class="badge">#{{doc._source.Id}}</span>&nbsp;<b>{{doc._source.Title}}</b>
-                        </p>
-                        <dl class="dl-horizontal">
-                            <dt>Size</dt>
-                            <dd>{{doc._source.Size}}</dd>
-                            <dt>Files</dt>
-                            <dd>{{doc._source.Files}}</dd>
-                            <dt>Hash</dt>
-                            <dd>{{doc._source.Hash}}</dd>
-                        </dl>
-                        <div class="well" ng-bind-html="doc._source.Info"></div>
-                        <p class="text-right">
-                            <small>Uploaded at {{doc._source.Uploaded}} by {{doc._source.By}}</small>
-                        </p>
-                    </div>
+            <div class="panel panel-info" ng-repeat="doc in searchResults">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a href="{{doc._source.Magnet}}">{{doc._source.Title}}</a>
+                        <a href="{{doc._source.Magnet}}"><img class="magnet_icon"
+                                                              src="assets/dist/img/magnet_link.png"></a>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <p class="text-center"><span
+                            class="badge">#{{doc._source.Id}}</span>&nbsp;<b>{{doc._source.Title}}</b>
+                    </p>
+                    <dl class="dl-horizontal">
+                        <dt>Size</dt>
+                        <dd>{{doc._source.Size}}</dd>
+                        <dt>Files</dt>
+                        <dd>{{doc._source.Files}}</dd>
+                        <dt>Hash</dt>
+                        <dd>{{doc._source.Hash}}</dd>
+                    </dl>
+                    <div class="well" ng-bind-html="doc._source.Info"></div>
+                    <p class="text-right">
+                        <small>Uploaded at {{doc._source.Uploaded}} by {{doc._source.By}}</small>
+                    </p>
                 </div>
             </div>
         </div>
