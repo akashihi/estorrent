@@ -72,7 +72,12 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
                     $scope.errorSubCategories = new Error('Unable to connect to elasticsearch.');
                 }
             });
+        } else {
+            $scope.selectedSubCategories = {};
+            $scope.filterSubCategories = [];
         }
+
+        $scope.searchClick();
     };
 
     $scope.subCategoryClick = function(subCategory) {
@@ -89,6 +94,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
             }
         });
 
+        $scope.searchClick();
     };
 
     $scope.searchClick = function(){
@@ -112,10 +118,14 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
 
     $scope.buildQuery = function() {
         var match = null;
-        if ($scope.useInfo) {
-            match = ejs.MultiMatchQuery(['Title', 'Info'], $scope.query)
+        if ($scope.query) {
+            if ($scope.useInfo) {
+                match = ejs.MultiMatchQuery(['Title', 'Info'], $scope.query)
+            } else {
+                match = ejs.MatchQuery('Title', $scope.query)
+            }
         } else {
-            match = ejs.MatchQuery('Title', $scope.query)
+            match = ejs.MatchAllQuery()
         }
 
         var filter = null;
@@ -140,5 +150,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
 
         return request
     }
+
+    $scope.searchClick();
 });
 
