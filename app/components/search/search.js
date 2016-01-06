@@ -17,6 +17,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
     $scope.selectedSubCategories = {};
     $scope.filterCategories = {};
     $scope.filterSubCategories = {};
+    $scope.pageNo = 0;
     client.search({
         index: 'tpb',
         type: 'torrent',
@@ -58,7 +59,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
                     //Restore selection
                     $scope.SubCategories.forEach(function (item) {
                         if ($scope.selectedSubCategories[item.key]) {
-                            item.active=true
+                            item.active = true
                         }
                     })
                 }
@@ -80,7 +81,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
         $scope.searchClick();
     };
 
-    $scope.subCategoryClick = function(subCategory) {
+    $scope.subCategoryClick = function (subCategory) {
         /* Mark button */
         subCategory.active = !subCategory.active;
 
@@ -97,13 +98,19 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
         $scope.searchClick();
     };
 
-    $scope.searchClick = function(){
+    $scope.searchClick = function () {
+        $scope.searchResults = [];
+        $scope.pageNo = 0;
+        $scope.doSearch();
+    };
+
+    $scope.doSearch = function () {
         client.search({
             index: 'tpb',
             type: 'torrent',
             body: $scope.buildQuery()
         }).then(function (resp) {
-            $scope.searchResults = resp.hits.hits
+                $scope.searchResults = $scope.searchResults.concat(resp.hits.hits);
             }
         ).catch(function (err) {
             $scope.errorResult = err;
@@ -114,9 +121,10 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
                 $scope.errorResult = new Error('Unable to connect to elasticsearch.');
             }
         });
-    }
 
-    $scope.buildQuery = function() {
+    };
+
+    $scope.buildQuery = function () {
         var match = null;
         if ($scope.query) {
             if ($scope.useInfo) {
@@ -129,12 +137,12 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
         }
 
         var filter = null;
-        if ($scope.filterSubCategories.length >0) {
+        if ($scope.filterSubCategories.length > 0) {
             filter = ejs.TermsFilter('Subcategory', $scope.filterSubCategories)
         }
-        if ($scope.filterCategories.length >0) {
+        if ($scope.filterCategories.length > 0) {
             var categoriesFilter = ejs.TermsFilter('Category', $scope.filterCategories);
-            if ( filter != null ) {
+            if (filter != null) {
                 filter = ejs.AndFilter([categoriesFilter, filter])
             } else {
                 filter = categoriesFilter
@@ -148,7 +156,14 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
             request = request.query(match)
         }
 
+        request = request.from($scope.pageNo*10)
+
         return request
+    }
+
+    $scope.nextPage = function() {
+        $scope.pageNo = $scope.pageNo +1;
+        $scope.doSearch();
     }
 
     $scope.searchClick();

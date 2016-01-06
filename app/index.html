@@ -105,7 +105,9 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    <p class="text-left">{{doc._source.Category}}&nbsp;/&nbsp;{{doc._source.Subcategory}}</p>
+                    <p class="text-left text-warning">
+                        {{doc._source.Category}}&nbsp;/&nbsp;{{doc._source.Subcategory}}</p>
+
                     <p class="text-center"><span
                             class="badge">#{{doc._source.Id}}</span>&nbsp;<b>{{doc._source.Title}}</b>
                     </p>
@@ -118,11 +120,14 @@
                         <dd>{{doc._source.Hash}}</dd>
                     </dl>
                     <div class="well" ng-bind-html="doc._source.Info"></div>
-                    <p class="text-right">
+                    <p class="text-right text-muted">
                         <small>Uploaded at {{doc._source.Uploaded}} by {{doc._source.By}}</small>
                     </p>
                 </div>
             </div>
+            <p ng-show="searchResults.length > 0" class="text-center">
+                <button type="button" class="btn btn-danger" ng-click="nextPage()">More</button>
+            </p>
         </div>
     </div>
 
