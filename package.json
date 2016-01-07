@@ -17,7 +17,8 @@
     "grunt-contrib-concat": "~0.5.1",
     "grunt-contrib-htmlmin": "~0.6.0",
     "grunt-processhtml": "~0.3.8",
-    "grunt-closure-compiler": "~0.0.21"
+    "grunt-closure-compiler": "~0.0.21",
+    "grunt-ng-annotate": "~1.0.1"
   },
   "scripts": {
     "postinstall": "bower install",

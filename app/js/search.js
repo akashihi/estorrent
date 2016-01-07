@@ -6,14 +6,17 @@ var estorrentSearch = angular.module('estorrent.search', [
 
 estorrentSearch.service('client', function (esFactory) {
     return esFactory({
-        host: '192.168.75.5:9200',
+        host: {
+            host: document.location.hostname,
+            port: 80,
+            path: "/es"
+        },
         apiVersion: '1.5'
     });
 });
 
-estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
+estorrentSearch.controller('SearchCtl', function ($scope, client) {
     //Initial load
-    $scope.errorCategories = "Not yet loaded";
     $scope.selectedSubCategories = {};
     $scope.filterCategories = {};
     $scope.filterSubCategories = {};
@@ -25,16 +28,8 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
         body: ejs.Request().agg(ejs.TermsAggregation('categories').field('Category'))
     }).then(function (resp) {
         $scope.categories = resp.aggregations.categories.buckets;
-        $scope.errorCategories = null;
-    }).catch(function (err) {
+    }).catch(function () {
         $scope.categories = null;
-        $scope.errorCategories = err;
-        // if the err is a NoConnections error, then the client was not able to
-        // connect to elasticsearch. In that case, create a more detailed error
-        // message
-        if (err instanceof esFactory.errors.NoConnections) {
-            $scope.errorCategories = new Error('Unable to connect to elasticsearch.');
-        }
     });
 
     $scope.categoryClick = function (category) {
@@ -57,7 +52,6 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
                 body: ejs.Request().agg(ejs.FilterAggregation('SubCategoryFilter').filter(ejs.TermsFilter('Category', $scope.filterCategories)).agg(ejs.TermsAggregation('categories').field('Subcategory').size(50)))
             }).then(function (resp) {
                     $scope.SubCategories = resp.aggregations.SubCategoryFilter.categories.buckets;
-                    $scope.errorSubCategories = null;
                     //Restore selection
                     $scope.SubCategories.forEach(function (item) {
                         if ($scope.selectedSubCategories[item.key]) {
@@ -65,15 +59,8 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
                         }
                     });
                 }
-            ).catch(function (err) {
+            ).catch(function () {
                 $scope.SubCategories = null;
-                $scope.errorSubCategories = err;
-                // if the err is a NoConnections error, then the client was not able to
-                // connect to elasticsearch. In that case, create a more detailed error
-                // message
-                if (err instanceof esFactory.errors.NoConnections) {
-                    $scope.errorSubCategories = new Error('Unable to connect to elasticsearch.');
-                }
             });
         } else {
             $scope.selectedSubCategories = {};
@@ -115,15 +102,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
         }).then(function (resp) {
                 $scope.searchResults = $scope.searchResults.concat(resp.hits.hits);
             }
-        ).catch(function (err) {
-            $scope.errorResult = err;
-            // if the err is a NoConnections error, then the client was not able to
-            // connect to elasticsearch. In that case, create a more detailed error
-            // message
-            if (err instanceof esFactory.errors.NoConnections) {
-                $scope.errorResult = new Error('Unable to connect to elasticsearch.');
-            }
-        }).finally(function() {
+        ).finally(function() {
             $scope.loading = false;
         });
 

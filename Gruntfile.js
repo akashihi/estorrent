@@ -7,6 +7,7 @@ module.exports = function (grunt) {
             files: ['Gruntfile.js', 'app/app.js', 'app/js/**/*.js', 'test/**/*.js'],
             options: {
                 globalstrict: true,
+                browser: true,
                 "globals": {
                     "angular": true,
                     "ejs": true,
@@ -24,13 +25,13 @@ module.exports = function (grunt) {
             files: ['<%= jshint.files %>'],
             tasks: ['jshint']
         },
-        imagemin: {                          // Task
-            dynamic: {                         // Another target
+        imagemin: {
+            dynamic: {
                 files: [{
-                    expand: true,                  // Enable dynamic expansion
-                    cwd: 'app/assets/src/',                   // Src matches are relative to this path
-                    src: ['**/*.{png,jpg,gif}'],   // Actual patterns to match
-                    dest: 'app/assets/dist/'                  // Destination path prefix
+                    expand: true,
+                    cwd: 'app/assets/src/',
+                    src: ['**/*.{png,jpg,gif}'],
+                    dest: 'app/assets/dist/'
                 }]
             }
         },
@@ -38,7 +39,7 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     ignore: [/js-.+/, '.special-class'],
-                    ignoreSheets: [/fonts.googleapis/],
+                    ignoreSheets: [/fonts.googleapis/]
                 },
                 files: {
                     'tmp/app.css': ['app/index.html']
@@ -53,11 +54,11 @@ module.exports = function (grunt) {
             }
         },
         processhtml: {
-          dist: {
-              files: {
-                  'tmp/index.html': ['app/index.html']
-              }
-          }
+            dist: {
+                files: {
+                    'tmp/index.html': ['app/index.html']
+                }
+            }
         },
         htmlmin: {
             dist: {
@@ -74,34 +75,45 @@ module.exports = function (grunt) {
             }
         },
         concat: {
-          dist: {
-              files: [
-                  {
-                      src: [
-                          'app/bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js',
-                          'app/bower_components/angular/angular.js',
-                          'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-                          'app/bower_components/elasticsearch/elasticsearch.angular.js',
-                          'app/bower_components/elastic.js/dist/elastic.min.js',
-                          'app/app.js',
-                          'components/search/search.js'
-                      ],
-                      dest: 'tmp/app.js'
-                  }
-              ]
-          }
+            dist: {
+                files: [
+                    {
+                        src: [
+                            'app/bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js',
+                            'app/bower_components/angular/angular.js',
+                            'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+                            'app/bower_components/elasticsearch/elasticsearch.angular.js',
+                            'app/bower_components/elastic.js/dist/elastic.min.js',
+                            'app/app.js',
+                            'app/js/search.js'
+                        ],
+                        dest: 'tmp/app.js'
+                    }
+                ]
+            }
+        },
+        ngAnnotate: {
+            options: {
+                singleQuotes: true,
+            },
+            app: {
+                files: [{
+                    src: "tmp/app.js",
+                    dest: 'tmp/annotated.js'
+                }]
+            }
         },
         'closure-compiler': {
             simple: {
                 js: [
-                    'tmp/app.js',
+                    'tmp/annotated.js'
                 ],
                 jsOutputFile: 'app/assets/dist/js/app.js',
                 noreport: true,
                 closurePath: "./",
                 options: {
-                    compilation_level: 'ADVANCED_OPTIMIZATIONS',
-                    warning_level:"DEFAULT"
+                    compilation_level: 'SIMPLE_OPTIMIZATIONS',
+                    warning_level: "DEFAULT"
                 }
             }
         }
@@ -116,6 +128,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-processhtml');
     grunt.loadNpmTasks('grunt-closure-compiler');
+    grunt.loadNpmTasks('grunt-ng-annotate');
 
-    grunt.registerTask('default', ['jshint', 'imagemin', 'uncss', 'cssmin', 'processhtml', 'htmlmin', 'concat', 'closure-compiler:simple']);
+    grunt.registerTask('default', ['jshint', 'imagemin', 'uncss', 'cssmin', 'processhtml', 'htmlmin', 'concat', 'ngAnnotate', 'closure-compiler:simple']);
 };

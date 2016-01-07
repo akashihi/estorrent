@@ -1,7 +1,8 @@
 {
   strict: "global",
   "globals": {
-    "angular": true,
+    "angular": false,
+    "document": false,
     "describe": false,
     "it": false,
     "expect": false,
