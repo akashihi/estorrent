@@ -42,10 +42,10 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
         category.active = !category.active;
 
         /* Reload sub categories list */
-        $scope.filterCategories = []
+        $scope.filterCategories = [];
         $scope.categories.forEach(function (item) {
             if (item.active) {
-                $scope.filterCategories.push(item.key)
+                $scope.filterCategories.push(item.key);
             }
         });
 
@@ -61,9 +61,9 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
                     //Restore selection
                     $scope.SubCategories.forEach(function (item) {
                         if ($scope.selectedSubCategories[item.key]) {
-                            item.active = true
+                            item.active = true;
                         }
-                    })
+                    });
                 }
             ).catch(function (err) {
                 $scope.SubCategories = null;
@@ -93,7 +93,7 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
         $scope.SubCategories.forEach(function (item) {
             if (item.active) {
                 $scope.selectedSubCategories[item.key] = true;
-                $scope.filterSubCategories.push(item.key)
+                $scope.filterSubCategories.push(item.key);
             }
         });
 
@@ -133,43 +133,43 @@ estorrentSearch.controller('SearchCtl', function ($scope, client, esFactory) {
         var match = null;
         if ($scope.query) {
             if ($scope.useInfo) {
-                match = ejs.MultiMatchQuery(['Title', 'Info'], $scope.query)
+                match = ejs.MultiMatchQuery(['Title', 'Info'], $scope.query);
             } else {
-                match = ejs.MatchQuery('Title', $scope.query)
+                match = ejs.MatchQuery('Title', $scope.query);
             }
         } else {
-            match = ejs.MatchAllQuery()
+            match = ejs.MatchAllQuery();
         }
 
         var filter = null;
         if ($scope.filterSubCategories.length > 0) {
-            filter = ejs.TermsFilter('Subcategory', $scope.filterSubCategories)
+            filter = ejs.TermsFilter('Subcategory', $scope.filterSubCategories);
         }
         if ($scope.filterCategories.length > 0) {
             var categoriesFilter = ejs.TermsFilter('Category', $scope.filterCategories);
-            if (filter != null) {
-                filter = ejs.AndFilter([categoriesFilter, filter])
+            if (filter !== null) {
+                filter = ejs.AndFilter([categoriesFilter, filter]);
             } else {
-                filter = categoriesFilter
+                filter = categoriesFilter;
             }
         }
 
         var request = ejs.Request();
-        if (filter != null) {
-            request = request.query(ejs.FilteredQuery(match, filter))
+        if (filter !== null) {
+            request = request.query(ejs.FilteredQuery(match, filter));
         } else {
-            request = request.query(match)
+            request = request.query(match);
         }
 
-        request = request.from($scope.pageNo*10)
+        request = request.from($scope.pageNo*10);
 
-        return request
-    }
+        return request;
+    };
 
     $scope.nextPage = function() {
         $scope.pageNo = $scope.pageNo +1;
         $scope.doSearch();
-    }
+    };
 
     $scope.searchClick();
 });

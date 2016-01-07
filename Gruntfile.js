@@ -1,11 +1,22 @@
+'use strict';
+
 module.exports = function (grunt) {
 
     grunt.initConfig({
         jshint: {
-            files: ['Gruntfile.js', 'app/**/*.js', 'test/**/*.js'],
+            files: ['Gruntfile.js', 'app/app.js', 'app/js/**/*.js', 'test/**/*.js'],
             options: {
-                globals: {
-                    jQuery: false
+                globalstrict: true,
+                "globals": {
+                    "angular": true,
+                    "ejs": true,
+                    "describe": false,
+                    "it": false,
+                    "expect": false,
+                    "beforeEach": false,
+                    "afterEach": false,
+                    "module": false,
+                    "inject": false
                 }
             }
         },
@@ -22,13 +33,89 @@ module.exports = function (grunt) {
                     dest: 'app/assets/dist/'                  // Destination path prefix
                 }]
             }
+        },
+        uncss: {
+            dist: {
+                options: {
+                    ignore: [/js-.+/, '.special-class'],
+                    ignoreSheets: [/fonts.googleapis/],
+                },
+                files: {
+                    'tmp/app.css': ['app/index.html']
+                }
+            }
+        },
+        cssmin: {
+            dist: {
+                files: {
+                    'app/assets/dist/css/app.css': ['tmp/app.css']
+                }
+            }
+        },
+        processhtml: {
+          dist: {
+              files: {
+                  'tmp/index.html': ['app/index.html']
+              }
+          }
+        },
+        htmlmin: {
+            dist: {
+                options: {
+                    removeComments: true,
+                    collapseWhitespace: true
+                },
+                files: [{
+                    expand: true,
+                    cwd: 'tmp',
+                    src: 'index.html',
+                    dest: 'app/assets/dist/'
+                }]
+            }
+        },
+        concat: {
+          dist: {
+              files: [
+                  {
+                      src: [
+                          'app/bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js',
+                          'app/bower_components/angular/angular.js',
+                          'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+                          'app/bower_components/elasticsearch/elasticsearch.angular.js',
+                          'app/bower_components/elastic.js/dist/elastic.min.js',
+                          'app/app.js',
+                          'components/search/search.js'
+                      ],
+                      dest: 'tmp/app.js'
+                  }
+              ]
+          }
+        },
+        uglify: {
+            dist: {
+                options: {
+                    compess: false,
+                    screwIE8: true,
+                },
+                files: [
+                    {
+                        src: 'tmp/app.js',
+                        dest: 'assets/dist/js/app.js'
+                    }
+                ]
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-uncss');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-processhtml');
 
-    grunt.registerTask('default', ['jshint']);
-    grunt.registerTask('default', ['imagemin']);
+    grunt.registerTask('default', ['jshint', 'imagemin', 'uncss', 'cssmin', 'processhtml', 'htmlmin', 'concat']);
 };

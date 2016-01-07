@@ -13,4 +13,4 @@ config([
 ]).
 config(['$sceProvider', function ($sceProvider) {
     $sceProvider.enabled(false);
-}])
+}]);

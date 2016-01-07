@@ -10,14 +10,16 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>My AngularJS App</title>
+    <title>The Pirate Bay database search engine</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- build:css css/app.css -->
     <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
     <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="app.css">
     <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+    <!-- /build -->
 </head>
 <body ng-controller="SearchCtl">
 <nav class="navbar navbar-default">
@@ -100,8 +102,10 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">
                         <a href="{{doc._source.Magnet}}">{{doc._source.Title}}</a>
+                        <!-- build:[src] img/ -->
                         <a href="{{doc._source.Magnet}}"><img class="magnet_icon"
                                                               src="assets/dist/img/magnet_link.png"></a>
+                        <!-- /build -->
                     </h3>
                 </div>
                 <div class="panel-body">
@@ -126,7 +130,9 @@
                 </div>
             </div>
             <p class="text-center text-danger" ng-show="loading">
+                <!-- build:[src] img/ -->
                 <img src="assets/dist/img/ajax-loader.gif"> <b>Loading</b></p>
+                <!-- /build -->
             </p>
             <p ng-show="searchResults.length > 0" class="text-center">
                 <button type="button" class="btn btn-danger" ng-click="nextPage()">More</button>
@@ -143,11 +149,13 @@
     <!-- In production use:
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
     -->
+    <!-- build:js js/app.js -->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="bower_components/elasticsearch/elasticsearch.angular.js"></script>
     <script src="bower_components/elastic.js/dist/elastic.min.js"></script>
     <script src="app.js"></script>
-    <script src="components/search/search.js"></script>
+    <script src="js/search.js"></script>
+    <!-- /build -->
 </body>
 </html>
