@@ -91,18 +91,18 @@ module.exports = function (grunt) {
               ]
           }
         },
-        uglify: {
-            dist: {
+        'closure-compiler': {
+            simple: {
+                js: [
+                    'tmp/app.js',
+                ],
+                jsOutputFile: 'app/assets/dist/js/app.js',
+                noreport: true,
+                closurePath: "./",
                 options: {
-                    compess: false,
-                    screwIE8: true,
-                },
-                files: [
-                    {
-                        src: 'tmp/app.js',
-                        dest: 'assets/dist/js/app.js'
-                    }
-                ]
+                    compilation_level: 'ADVANCED_OPTIMIZATIONS',
+                    warning_level:"DEFAULT"
+                }
             }
         }
     });
@@ -110,12 +110,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-uncss');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-processhtml');
+    grunt.loadNpmTasks('grunt-closure-compiler');
 
-    grunt.registerTask('default', ['jshint', 'imagemin', 'uncss', 'cssmin', 'processhtml', 'htmlmin', 'concat']);
+    grunt.registerTask('default', ['jshint', 'imagemin', 'uncss', 'cssmin', 'processhtml', 'htmlmin', 'concat', 'closure-compiler:simple']);
 };
