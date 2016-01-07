@@ -1,0 +1,50 @@
+{
+      "properties" : {
+        "Id" : {
+          "type" :    "long",
+          "index" : "no"
+        },
+        "Title" : {
+          "type" :   "string",
+          "index" : "analyzed",
+          "analyzer" : "customHTMLSnowball"
+        },
+        "Size" : {
+          "type" :    "long",
+          "index" : "no"
+        },
+        "Files" : {
+          "type" :    "long",
+          "index" : "no"
+        },
+        "Category" : {
+          "type" :    "string",
+          "index" : "not_analyzed"
+        },
+        "Subcategory" : {
+          "type" :    "string",
+          "index" : "not_analyzed"
+        },
+        "By" : {
+          "type" :    "string",
+          "index" : "no"
+        },
+        "Hash" : {
+          "type" :    "string",
+          "index" : "not_analyzed"
+        },
+        "Uploaded" : {
+          "type" :    "date",
+          "index" : "no"
+        },
+        "Magnet" : {
+          "type" :    "string",
+          "index" : "no"
+        },
+        "Info" : {
+          "type" :   "string",
+          "index" : "analyzed",
+          "analyzer" : "customHTMLSnowball"
+        }
+      }
+}
