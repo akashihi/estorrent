@@ -81,5 +81,6 @@ func (i *Indexer) Run() {
 		}
 		log.Info("Indexed %s", t.Title)
 	}
+	log.Info("Scenner closed with: %v", i.scaner.Err())
 	i.file.Close()
 }
